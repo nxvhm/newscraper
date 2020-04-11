@@ -1,0 +1,15 @@
+{
+    "name": "nxvhm/newscraper",
+    "description": "News Scrapper for Laravel",
+    "type": "project",
+    "require": {
+        "fabpot/goutte": "^4.0@dev"
+    },
+    "authors": [
+        {
+            "name": "Antoan Partadzhiev",
+            "email": "a.partadzhiev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
