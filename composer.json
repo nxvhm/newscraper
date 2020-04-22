@@ -11,5 +11,17 @@
             "email": "a.partadzhiev@gmail.com"
         }
     ],
+    "autoload": {
+      "psr-4": {
+          "Nxvhm\\Newscraper\\": "src/"
+      }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nxvhm\\Newscraper\\NewscraperServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev"
 }
