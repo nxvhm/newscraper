@@ -2,6 +2,8 @@
 
 namespace Nxvhm\Newscraper\Commands;
 use Illuminate\Console\Command;
+use Nxvhm\Newscraper\Scraper as NewsScrapper;
+use Nxvhm\Newscraper\Factory;
 
 class Scraper extends Command
 {
@@ -26,6 +28,20 @@ class Scraper extends Command
     public function handle()
     {
       $site = $this->argument('site');
-      var_dump($site);
+
+      if (!$site) {
+        return $this->error("No site specified");
+      }
+
+      $strategy = Factory::getScrapingStrategy($site);
+
+      if (!$strategy) {
+        throw new Exception("Strategy class not found for $site");
+      }
+
+      $scraper = new NewsScrapper($strategy);
+
+      $scraper->getListOfLinks();
+
     }
 }
