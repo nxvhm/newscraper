@@ -15,12 +15,18 @@ abstract class Strategy {
    * @return  String
    */
   abstract function getSiteUrl();
+
   /**
-   * Get array with relative urls specifiyng website pages
+   * Get array with absolute urls specifiyng website pages
    * from which we will gather article links
    *
    * @return  Array
    */
-  abstract function getPagesToCrawl();
+  public function getPagesToCrawl(): array {
+    return array_map(function($page) {
+      return $this->getSiteUrl().$page;
+    }, $this->pagesToCrawl);
+  }
+
 
 }

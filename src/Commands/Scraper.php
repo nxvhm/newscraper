@@ -32,14 +32,15 @@ class Scraper extends Command
       if (!$site) {
         return $this->error("No site specified");
       }
-
+      # Get instance of scraping strategy
       $strategy = Factory::getScrapingStrategy($site);
 
       if (!$strategy) {
         throw new Exception("Strategy class not found for $site");
       }
 
-      $scraper = new NewsScrapper($strategy);
+      # Create scraper with desired strategy
+      $scraper = new NewsScrapper($strategy, $this);
 
       $scraper->getListOfLinks();
 
