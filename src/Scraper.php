@@ -33,11 +33,36 @@ class Scraper {
 
   }
 
-  public function getListOfLinks() {
+  /**
+   * Get all of the links for the selected pages to scrape
+   *
+   * @return  Array
+   */
+  public function getListOfLinks(): array {
+    $links = [];
+
     foreach ($this->strategy->getPagesToCrawl() as $page) {
+
       if ($this->command) {
         $this->command->info('Fetch Links for '.$page);
       }
+
+      $crawler = $this->httpClient->request('GET', $page);
+
+      $anchors = $crawler->filter('a');
+
+      if ($this->command) {
+        $this->command->line($anchors->count(). ' links fetched');
+      }
+
+      if (!$anchors->count()) continue;
+
+      $anchors->each(function($a) use (&$links) {
+        array_push($links, $a->attr('href'));
+      });
+
     }
+
+    return $links;
   }
 }
