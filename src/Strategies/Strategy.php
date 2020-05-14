@@ -23,9 +23,13 @@ abstract class Strategy {
    * @return  Array
    */
   public function getPagesToCrawl(): array {
-    return array_map(function($page) {
-      return $this->getSiteUrl().$page;
+
+    $pages = array_map(function($page) {
+      $url =  $this->getSiteUrl().$page;
+      return filter_var($url, FILTER_VALIDATE_URL) ? $url : null;
     }, $this->pagesToCrawl);
+
+    return array_filter($pages, 'strlen');
   }
 
 
