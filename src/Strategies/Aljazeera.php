@@ -39,12 +39,38 @@ class Aljazeera extends Strategy implements NewsScraperInterface
   public function getNewsLinks() {
 
   }
+  /**
+   * Filter all urls which are not pointing to an article
+   *
+   * @param   Array  $links Raw extracted hrefs
+   * @return  Array  $links Filtered links pointing to an article
+   */
+  public function stripInvalidLinks(array $urls): array {
+    foreach ($urls as $key => $url) {
 
-  public function stripInvalidLinks() {
+      # This site works with relative links, so concat with host
+      if ($url[0] == '/') {
+        $url = $this->getSiteUrl().$url;
+        # Save concatenated url back in array
+        $urls[$key] = $url;
+      }
 
+      $parts = explode('/', $url);
+
+      if (!$parts || !is_countable($parts) || count($parts) < 7) {
+        unset($urls[$key]);
+      }
+
+      if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        unset($urls[$key]);
+      }
+
+    }
+
+    return array_unique($urls);
   }
 
-  public function extractDataFromLink() {
+  public function extractDataFromLink(string $url): array {
 
   }
 

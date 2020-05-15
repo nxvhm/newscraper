@@ -37,15 +37,30 @@ class Guardian extends Strategy implements NewsScraperInterface
     return $this->url;
   }
 
-  public function getNewsLinks() {
+  /**
+   * Filter all urls which are not pointing to an article
+   *
+   * @param   Array  $links Raw extracted hrefs
+   * @return  Array  $links Filtered links pointing to an article
+   */
+  public function stripInvalidLinks(array $links): array {
+    foreach ($links as $key => $link) {
+      $parts = explode('/', $link);
 
+      if (!$parts || !is_countable($parts) || count($parts) < 8) {
+        unset($links[$key]);
+      }
+
+      if (!filter_var($link, FILTER_VALIDATE_URL)) {
+        unset($links[$key]);
+      }
+
+    }
+
+    return array_unique($links);
   }
 
-  public function stripInvalidLinks() {
-
-  }
-
-  public function extractDataFromLink() {
+  public function extractDataFromLink(string $link): array {
 
   }
 }

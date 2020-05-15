@@ -44,25 +44,24 @@ class Scraper {
     foreach ($this->strategy->getPagesToCrawl() as $page) {
 
       if ($this->command) {
-        $this->command->info('Fetch Links for '.$page);
+        $this->command->info('Fetch Links from '.$page);
       }
 
       $crawler = $this->httpClient->request('GET', $page);
 
       $anchors = $crawler->filter('a');
 
-      if ($this->command) {
-        $this->command->line($anchors->count(). ' links fetched');
-      }
-
       if (!$anchors->count()) continue;
 
       $anchors->each(function($a) use (&$links) {
         array_push($links, $a->attr('href'));
       });
-
     }
 
-    return $links;
+    if ($this->command) {
+      $this->command->line(count($links). ' raw links extracted from pages');
+    }
+
+    return $this->strategy->stripInvalidLinks($links);
   }
 }
