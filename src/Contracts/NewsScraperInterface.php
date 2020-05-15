@@ -5,10 +5,22 @@ namespace Nxvhm\Newscraper\Contracts;
 interface NewsScraperInterface
 {
 
-  public function getNewsLinks();
+  /**
+   * Implement logic to decide what is valid/invalid link
+   *
+   * @param   Array  $links
+   *
+   * @return  Array
+   */
+  public function stripInvalidLinks(array $urls): array;
 
-  public function stripInvalidLinks();
-
-  public function extractDataFromLink();
+  /**
+   * Implement logic to extract all of the required data from a web page
+   *
+   * @param   String  $link  Valid url
+   *
+   * @return  Array
+   */
+  public function extractDataFromLink(string $url): array;
 
 }

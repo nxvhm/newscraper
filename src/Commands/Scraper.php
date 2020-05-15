@@ -22,7 +22,6 @@ class Scraper extends Command
     public function __construct()
     {
       parent::__construct();
-
     }
 
     public function handle()
@@ -42,7 +41,9 @@ class Scraper extends Command
       # Create scraper with desired strategy
       $scraper = new NewsScrapper($strategy, $this);
 
-      $scraper->getListOfLinks();
+      $links = $scraper->getListOfLinks();
+
+      $this->info(count($links). ' links after filter');
 
     }
 }
