@@ -3,17 +3,20 @@
 namespace Nxvhm\Newscraper\Strategies;
 
 use Nxvhm\Newscraper\Contracts\NewsScraperInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 class Aljazeera extends Strategy implements NewsScraperInterface
 {
 
   public $name = "Aljazeera News";
+
 	/**
 	 * Site Url
    *
 	 * @var string
 	 */
   public $url = "https://www.aljazeera.com";
+
   /**
    * Relative path to pages from which we fetch links
    *
@@ -24,8 +27,15 @@ class Aljazeera extends Strategy implements NewsScraperInterface
     '/topics/regions/africa.html'
   ];
 
-  public $bodyTextQueries = [
-    '.article-content__text'
+  /**
+   * CSS Query Selectors for article contetns
+   * @var Array
+   */
+  public $contentSelectors = [
+    'title'       => 'h1.post-title',
+    'description' => '.article-heading-des',
+    'text'        => '.article-p-wrapper > p',
+    'date'        => 'time'
   ];
 
   public function getSiteName(): string {
@@ -36,9 +46,6 @@ class Aljazeera extends Strategy implements NewsScraperInterface
     return $this->url;
   }
 
-  public function getNewsLinks() {
-
-  }
   /**
    * Filter all urls which are not pointing to an article
    *
@@ -55,9 +62,9 @@ class Aljazeera extends Strategy implements NewsScraperInterface
         $urls[$key] = $url;
       }
 
-      $parts = explode('/', $url);
+      $parts = array_filter(explode('/', $url));
 
-      if (!$parts || !is_countable($parts) || count($parts) < 7) {
+      if (!$parts || !is_countable($parts) || count($parts) < 6) {
         unset($urls[$key]);
       }
 
@@ -70,8 +77,35 @@ class Aljazeera extends Strategy implements NewsScraperInterface
     return array_unique($urls);
   }
 
-  public function extractDataFromLink(string $url): array {
+  public function getContentSelectors(): array {
+    return $this->contentSelectors;
+  }
 
+  public function getArticleData(Crawler $crawler): array {
+
+    # Initialize Empty array representing article data
+    $data = array_fill_keys(array_keys($this->getContentSelectors()), "");
+
+    foreach ($this->getContentSelectors() as $contentType => $selector) {
+
+      if ($crawler->filter($selector)->count()) {
+
+        $crawler->filter($selector)->each(function($node) use($contentType, &$data) {
+
+          if ($contentType == 'date') {
+
+            $dateStr = strtotime($node->attr('datetime'));
+
+            $data[$contentType] = $dateStr ? date('Y-m-d', $dateStr) : $node->text();
+
+          } else {
+            $data[$contentType] .= $node->text();
+          }
+        });
+      }
+    }
+
+    return $data;
   }
 
 }
