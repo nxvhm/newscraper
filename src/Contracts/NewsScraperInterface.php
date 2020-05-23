@@ -1,6 +1,7 @@
 <?php
 
 namespace Nxvhm\Newscraper\Contracts;
+use Symfony\Component\DomCrawler\Crawler;
 
 interface NewsScraperInterface
 {
@@ -15,12 +16,21 @@ interface NewsScraperInterface
   public function stripInvalidLinks(array $urls): array;
 
   /**
-   * Implement logic to extract all of the required data from a web page
+   * Implement logic to extract all of the required article data from a web page
    *
    * @param   String  $link  Valid url
    *
    * @return  Array
    */
-  public function extractDataFromLink(string $url): array;
+  public function getArticleData(Crawler $crawler): array;
+
+  /**
+   * Return array containing dom selectors
+   *
+   * @param Void
+   *
+   * @return Array
+   */
+  public function getContentSelectors(): array;
 
 }
