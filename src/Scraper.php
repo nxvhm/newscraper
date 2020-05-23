@@ -21,6 +21,8 @@ class Scraper {
 
   protected $command;
 
+  protected $timeout;
+
   public function __construct(Strategy $strategy, $cmd = null) {
 
     $this->strategy = $strategy;
@@ -63,5 +65,29 @@ class Scraper {
     }
 
     return $this->strategy->stripInvalidLinks($links);
+  }
+
+  public function articleFromLink(string $url): array {
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+      return [];
+    }
+
+    $this->output("Processing $url", 'line');
+
+    $crawler = $this->httpClient->request('GET', $url);
+
+    if ($this->httpClient->getResponse()->getStatusCode() !== 200) {
+      $this->output("Response Status Code is not 200, continue..", 'error');
+      return [];
+    }
+
+    return  $this->strategy->getArticleData($crawler);
+
+  }
+
+  public function output(string $msg, $type = 'info'): void {
+    $this->command && $this->command instanceof Command
+      ? call_user_func([$this->command, $type], $msg)
+      : print("\n $msg");
   }
 }
