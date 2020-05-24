@@ -7,12 +7,6 @@ use Nxvhm\Newscraper\Strategies\Strategy;
 
 class Scraper {
   /**
-   * [$links description]
-   *
-   * @var Array
-   */
-  protected $links;
-  /**
    * Crawling strategy
    *
    * @var Nxvhm\Newscraper\Strategies\Strategy;
@@ -20,8 +14,6 @@ class Scraper {
   protected $strategy;
 
   protected $command;
-
-  protected $timeout;
 
   public function __construct(Strategy $strategy, $cmd = null) {
 
@@ -43,6 +35,7 @@ class Scraper {
   public function getListOfLinks(): array {
     $links = [];
 
+    # Iterate through the pages we want to crawl and scrape all hrefs
     foreach ($this->strategy->getPagesToCrawl() as $page) {
 
       if ($this->command) {
@@ -60,9 +53,7 @@ class Scraper {
       });
     }
 
-    if ($this->command) {
-      $this->command->line(count($links). ' raw links extracted from pages');
-    }
+    $this->output(count($links). ' raw links extracted from pages');
 
     return $this->strategy->stripInvalidLinks($links);
   }
