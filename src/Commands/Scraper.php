@@ -59,7 +59,11 @@ class Scraper extends Command
 
           if (empty($article)) {
             $this->info("No data scrapped for $url");
+
+          } else {
+            $this->info(vsprintf("Title %s , description: %s, date %s, author %s", $article));
           }
+
 
           # Timeout between requests
           sleep($timeout);
