@@ -13,29 +13,18 @@ class Guardian extends Strategy implements NewsScraperInterface
 	 * @var string
 	 */
   public $url = "https://www.theguardian.com";
+
   /**
    * Relative path to pages from which we fetch links
    *
    * @var array
    */
   public $pagesToCrawl = [
-    '/world',
-    '/international',
-    '/uk-news',
-    '/global-development'
+    '/topics/regions/middleeast.html',
+    '/topics/regions/africa.html',
+    '/topics/regions/asia.html',
+    '/topics/regions/asia-pacific.html'
   ];
-
-  public $bodyTextQueries = [
-    // '.article-content__text'
-  ];
-
-  public function getSiteName(): string {
-    return $this->name;
-  }
-
-  public function getSiteUrl(): string {
-    return $this->url;
-  }
 
   /**
    * Filter all urls which are not pointing to an article

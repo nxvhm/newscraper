@@ -36,9 +36,9 @@ class Aljazeera extends Strategy implements NewsScraperInterface
   public $contentSelectors = [
     'title'       => 'h1.post-title',
     'description' => '.article-heading-des',
-    'text'        => '.article-p-wrapper > p',
     'date'        => 'time',
     'author'      => '.article-heading-author-name',
+    'text'        => '.article-p-wrapper > p',
     'category'    => '#article-body-topics',
   ];
 
