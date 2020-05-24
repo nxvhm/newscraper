@@ -24,7 +24,9 @@ class Aljazeera extends Strategy implements NewsScraperInterface
    */
   public $pagesToCrawl = [
     '/topics/regions/middleeast.html',
-    '/topics/regions/africa.html'
+    '/topics/regions/africa.html',
+    '/topics/regions/asia.html',
+    '/topics/regions/asia-pacific.html'
   ];
 
   /**
@@ -35,16 +37,10 @@ class Aljazeera extends Strategy implements NewsScraperInterface
     'title'       => 'h1.post-title',
     'description' => '.article-heading-des',
     'text'        => '.article-p-wrapper > p',
-    'date'        => 'time'
+    'date'        => 'time',
+    'author'      => '.article-heading-author-name',
+    'category'    => '#article-body-topics',
   ];
-
-  public function getSiteName(): string {
-    return $this->name;
-  }
-
-  public function getSiteUrl(): string {
-    return $this->url;
-  }
 
   /**
    * Filter all urls which are not pointing to an article
@@ -81,31 +77,6 @@ class Aljazeera extends Strategy implements NewsScraperInterface
     return $this->contentSelectors;
   }
 
-  public function getArticleData(Crawler $crawler): array {
 
-    # Initialize Empty array representing article data
-    $data = array_fill_keys(array_keys($this->getContentSelectors()), "");
-
-    foreach ($this->getContentSelectors() as $contentType => $selector) {
-
-      if ($crawler->filter($selector)->count()) {
-
-        $crawler->filter($selector)->each(function($node) use($contentType, &$data) {
-
-          if ($contentType == 'date') {
-
-            $dateStr = strtotime($node->attr('datetime'));
-
-            $data[$contentType] = $dateStr ? date('Y-m-d', $dateStr) : $node->text();
-
-          } else {
-            $data[$contentType] .= $node->text();
-          }
-        });
-      }
-    }
-
-    return $data;
-  }
 
 }
