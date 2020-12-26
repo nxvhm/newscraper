@@ -50,6 +50,10 @@ class Scraper extends Command
       $scraper = new NewsScrapper($strategy, $this);
 
       $links = $scraper->getListOfLinks();
+      
+      $this->info(count($links). ' raw links extracted from pages');
+
+      $links = $scraper->strategy->stripInvalidLinks($links);
 
       $this->info(count($links). ' links after filter');
 
@@ -61,7 +65,7 @@ class Scraper extends Command
             $this->info("No data scrapped for $url");
 
           } else {
-            $this->info(vsprintf("Title %s , description: %s, date %s, author %s", $article));
+            $this->info(vsprintf("Title %s  \n, description: %s \n, date %s \n, author %s \n", $article));
           }
 
 
@@ -72,7 +76,6 @@ class Scraper extends Command
           Log::error($e);
           $this->error("Error processing $url");
           $this->error($e->getMessage());
-
         }
 
       }

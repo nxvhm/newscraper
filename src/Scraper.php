@@ -11,9 +11,9 @@ class Scraper {
    *
    * @var Nxvhm\Newscraper\Strategies\Strategy;
    */
-  protected $strategy;
+  public $strategy;
 
-  protected $command;
+  public $command;
 
   public function __construct(Strategy $strategy, $cmd = null) {
 
@@ -34,7 +34,6 @@ class Scraper {
    */
   public function getListOfLinks(): array {
     $links = [];
-
     # Iterate through the pages we want to crawl and scrape all hrefs
     foreach ($this->strategy->getPagesToCrawl() as $page) {
 
@@ -53,9 +52,9 @@ class Scraper {
       });
     }
 
-    $this->output(count($links). ' raw links extracted from pages');
-
-    return $this->strategy->stripInvalidLinks($links);
+    // $this->output(count($links). ' raw links extracted from pages');
+    return $links;
+    // return $this->strategy->stripInvalidLinks($links);
   }
 
   public function articleFromLink(string $url): array {
