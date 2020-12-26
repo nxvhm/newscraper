@@ -3,6 +3,7 @@
 namespace Nxvhm\Newscraper\Strategies;
 
 use Nxvhm\Newscraper\Contracts\NewsScraperInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 class Guardian extends Strategy implements NewsScraperInterface
 {
@@ -20,11 +21,23 @@ class Guardian extends Strategy implements NewsScraperInterface
    * @var array
    */
   public $pagesToCrawl = [
-    '/topics/regions/middleeast.html',
-    '/topics/regions/africa.html',
-    '/topics/regions/asia.html',
-    '/topics/regions/asia-pacific.html'
+    '/world',
+    '/uk-news',
+    '/lifestyle',
   ];
+
+
+  /**
+   * CSS Query Selectors for article contetns
+   * @var Array
+   */
+  public $contentSelectors = [
+    'title'       => 'h1',
+    'description' => '.content__standfirst, .css-zjgnrw',
+    'date'        => 'time, .css-hn0k3p',
+    'author'      => 'p.byline',
+    'text'        => '.content__article-body',
+  ];  
 
   /**
    * Filter all urls which are not pointing to an article
@@ -52,4 +65,5 @@ class Guardian extends Strategy implements NewsScraperInterface
   public function extractDataFromLink(string $link): array {
 
   }
+
 }

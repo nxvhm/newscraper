@@ -23,14 +23,4 @@ interface NewsScraperInterface
    * @return  Array
    */
   public function getArticleData(Crawler $crawler): array;
-
-  /**
-   * Return array containing dom selectors
-   *
-   * @param Void
-   *
-   * @return Array
-   */
-  public function getContentSelectors(): array;
-
 }

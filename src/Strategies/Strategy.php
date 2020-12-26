@@ -19,7 +19,11 @@ abstract class Strategy {
 
     return array_filter($pages, 'strlen');
   }
-
+  /**
+   * Scrape data through the define content selectors
+   * @param  Crawler $crawler Instance containing page markup
+   * @return Array
+   */
   public function getArticleData(Crawler $crawler): array {
 
     # Initialize Empty array representing article data
@@ -27,13 +31,24 @@ abstract class Strategy {
 
     foreach ($this->getContentSelectors() as $contentType => $selector) {
 
+      # If method is implemented for parsing the specific content type,
+      # then execute that method and continue with next contentType
+      $methodName = 'parse'.ucfirst($contentType);
+      if (method_exists($this, $methodName)) {
+        $data[$contentType] = call_user_func_array([$this, $methodName], [$crawler]);
+        continue;
+      }
+      
+      # Execute css selector for a given contentType  
       if ($crawler->filter($selector)->count()) {
 
         $crawler->filter($selector)->each(function($node) use($contentType, &$data) {
 
           if ($contentType == 'date') {
 
-            $dateStr = strtotime($node->attr('datetime'));
+            $dateStr = $node->attr('datetime') 
+              ? strtotime(substr($node->attr('datetime'), 0, 10))
+              : strtotime($node->text());
 
             $data[$contentType] = $dateStr ? date('Y-m-d', $dateStr) : $node->text();
 
@@ -55,6 +70,17 @@ abstract class Strategy {
   public function getSiteUrl(): string {
     return $this->url;
   }
+
+  /**
+   * Return array containing dom selectors
+   *
+   * @param Void
+   *
+   * @return Array
+   */
+  public function getContentSelectors(): array {
+    return $this->contentSelectors;
+  }  
 
 
 }
