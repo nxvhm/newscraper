@@ -2,7 +2,7 @@
 
 namespace Nxvhm\Newscraper\Commands;
 use Illuminate\Console\Command;
-use Nxvhm\Newscraper\Scraper as NewsScrapper;
+use Nxvhm\Newscraper\Newscraper;
 use Nxvhm\Newscraper\Factory;
 use Log;
 
@@ -47,16 +47,15 @@ class Scraper extends Command
       }
 
       # Create scraper with desired strategy
-      $scraper = new NewsScrapper($strategy, $this);
+      $scraper = new Newscraper($strategy, $this);
 
       $links = $scraper->getListOfLinks();
-      
+
       $this->info(count($links). ' raw links extracted from pages');
 
       $links = $scraper->strategy->stripInvalidLinks($links);
 
       $this->info(count($links). ' links after filter');
-
       foreach($links as $url) {
         try {
           $article = $scraper->articleFromLink($url);
@@ -65,9 +64,8 @@ class Scraper extends Command
             $this->info("No data scrapped for $url");
 
           } else {
-            $this->info(vsprintf("Title %s  \n, description: %s \n, date %s \n, author %s \n", $article));
+            $this->info(vsprintf("Title %s  \nDescription: %s \nDate: %s \nAuthor: %s \nCategory: %s \n", $article));
           }
-
 
           # Timeout between requests
           sleep($timeout);

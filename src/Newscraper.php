@@ -5,7 +5,7 @@ use Goutte\Client;
 use Illuminate\Console\Command;
 use Nxvhm\Newscraper\Strategies\Strategy;
 
-class Scraper {
+class Newscraper {
   /**
    * Crawling strategy
    *
@@ -15,7 +15,7 @@ class Scraper {
 
   public $command;
 
-  public function __construct(Strategy $strategy, $cmd = null) {
+  public function __construct(Strategy $strategy, Command $cmd = null) {
 
     $this->strategy = $strategy;
 
@@ -70,7 +70,6 @@ class Scraper {
       $this->output("Response Status Code is not 200, continue..", 'error');
       return [];
     }
-
     return  $this->strategy->getArticleData($crawler);
 
   }
@@ -79,5 +78,9 @@ class Scraper {
     $this->command && $this->command instanceof Command
       ? call_user_func([$this->command, $type], $msg)
       : print("\n $msg");
+  }
+
+  public static function getConfig($path = null):array {
+    return $path ? config('newscraper.'.$path, []) : config('newscraper');
   }
 }
