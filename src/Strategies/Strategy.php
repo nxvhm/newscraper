@@ -38,15 +38,15 @@ abstract class Strategy {
         $data[$contentType] = call_user_func_array([$this, $methodName], [$crawler]);
         continue;
       }
-      
-      # Execute css selector for a given contentType  
+
+      # Execute css selector for a given contentType
       if ($crawler->filter($selector)->count()) {
 
         $crawler->filter($selector)->each(function($node) use($contentType, &$data) {
 
           if ($contentType == 'date') {
 
-            $dateStr = $node->attr('datetime') 
+            $dateStr = $node->attr('datetime')
               ? strtotime(substr($node->attr('datetime'), 0, 10))
               : strtotime($node->text());
 
@@ -80,7 +80,19 @@ abstract class Strategy {
    */
   public function getContentSelectors(): array {
     return $this->contentSelectors;
-  }  
+  }
+
+  /**
+   * Filter all urls which are not pointing to an article
+   *
+   * @param   Array  $urls Raw extracted hrefs
+   * @return  Array  Filtered links pointing to an article
+   */
+  public function stripInvalidLinks($urls) {
+    return array_unique(array_filter(
+      array_map([$this, 'validateAndFormatUrl'], $urls)
+    ));
+  }
 
 
 }
