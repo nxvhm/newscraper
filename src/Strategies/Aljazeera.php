@@ -34,49 +34,37 @@ class Aljazeera extends Strategy implements NewsScraperInterface
    * @var Array
    */
   public $contentSelectors = [
-    'title'       => 'h1.post-title',
-    'description' => '.article-heading-des',
-    'date'        => 'time',
+    'title'       => 'h1',
+    'description' => '.article__subhead',
+    'date'        => '.date-simple',
     'author'      => '.article-heading-author-name',
-    'text'        => '.article-p-wrapper > p',
-    'category'    => '#article-body-topics',
+    'category'    => '.topics',
+    'text'        => '.wysiwyg--all-content',
   ];
 
+
   /**
-   * Filter all urls which are not pointing to an article
+   * Filter  which are not pointing to an article.
    *
-   * @param   Array  $links Raw extracted hrefs
-   * @return  Array  $links Filtered links pointing to an article
+   * @param   String  $url Raw extracted url from href attr
+   * @return  Mixed  $url String containing formated and Validated link, or null otherwise
    */
-  public function stripInvalidLinks(array $urls): array {
-    foreach ($urls as $key => $url) {
-
-      # This site works with relative links, so concat with host
-      if ($url[0] == '/') {
-        $url = $this->getSiteUrl().$url;
-        # Save concatenated url back in array
-        $urls[$key] = $url;
-      }
-
-      $parts = array_filter(explode('/', $url));
-
-      if (!$parts || !is_countable($parts) || count($parts) < 6) {
-        unset($urls[$key]);
-      }
-
-      if (!filter_var($url, FILTER_VALIDATE_URL)) {
-        unset($urls[$key]);
-      }
-
+  public function validateAndFormatUrl(string $url) {
+    # This site works with relative links, so concat with host
+    if ($url[0] == '/') {
+      $url = $this->getSiteUrl().$url;
     }
 
-    return array_unique($urls);
+    $parts = array_filter(explode('/', $url));
+    if (!$parts || !is_countable($parts) || count($parts) < 6) {
+      $url = null;
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+     $url = null;
+    }
+
+    return $url;
   }
-
-  public function getContentSelectors(): array {
-    return $this->contentSelectors;
-  }
-
-
 
 }

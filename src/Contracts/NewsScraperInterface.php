@@ -7,13 +7,14 @@ interface NewsScraperInterface
 {
 
   /**
-   * Implement logic to decide what is valid/invalid link
+   * Implement logic to decide what is valid/invalid url
+   * Currently used Used as array_map callback
    *
-   * @param   Array  $links
+   * @param   String  $url
    *
-   * @return  Array
+   * @return  String
    */
-  public function stripInvalidLinks(array $urls): array;
+  public function validateAndFormatUrl(string $url);
 
   /**
    * Implement logic to extract all of the required article data from a web page
