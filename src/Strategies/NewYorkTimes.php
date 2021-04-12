@@ -50,26 +50,7 @@ class NewYorkTimes extends Strategy implements NewsScraperInterface
    * @return  Mixed  $url String containing formated and Validated link, or null otherwise
    */
   public function validateAndFormatUrl($url) {
-
-    if (null == $url) {
-      return $url;
-    }
-
-    # This site works with relative links, so concat with host
-    if ($url[0] == '/') {
-      $url = $this->getSiteUrl().$url;
-    }
-
-    $parts = array_filter(explode('/', $url));
-    if (!$parts || !is_countable($parts) || count($parts) < 6) {
-      $url = null;
-    }
-
-    if (!filter_var($url, FILTER_VALIDATE_URL)) {
-     $url = null;
-    }
-
-    return $url;
+    return $this->urlValidationClosure($urlParts = 6)($url);
   }
 
 

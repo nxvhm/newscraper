@@ -44,21 +44,8 @@ class Guardian extends Strategy implements NewsScraperInterface
   ];
 
   public function validateAndFormatUrl($url) {
-    if (null == $url) {
-      return $url;
-    }
+    return $this->getStandardUrlValidationClosure($urlParts = 8);
 
-    $parts = explode('/', $url);
-
-    if (!$parts || !is_countable($parts) || count($parts) < 8) {
-      $url = null;
-    }
-
-    if (!filter_var($url, FILTER_VALIDATE_URL)) {
-      $url = null;
-    }
-
-    return $url;
   }
 
 }
