@@ -64,8 +64,14 @@ class Scraper extends Command
             $this->info("No data scrapped for $url");
 
           } else {
-            $this->info(vsprintf("Title %s  \nDescription: %s \nDate: %s \nAuthor: %s \nCategory: %s \n", $article));
+            $this->info(sprintf("Title %s \nDescription: %s \nDate: %s \n",
+              $article['title'],
+              $article['description'],
+              $article['date'])
+            );
           }
+
+          // $scraper->strategy->saveData($article);
 
           # Timeout between requests
           sleep($timeout);
