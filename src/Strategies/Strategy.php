@@ -55,7 +55,7 @@ abstract class Strategy {
    * @param   Array  $urls Raw extracted hrefs
    * @return  Array  Filtered links pointing to an article
    */
-  public function stripInvalidLinks($urls) {
+  public function stripInvalidLinks($urls): array {
     return array_unique(array_filter(
       array_map([$this, 'validateAndFormatUrl'], $urls)
     ));
@@ -112,6 +112,35 @@ abstract class Strategy {
     }
 
     return $data;
+  }
+  /**
+   * The default url validation function
+   *
+   * @param integer $partsCount The number of elements you get when you explode the url with "/" delimiter
+   * @return void
+   */
+  public function urlValidationClosure($partsCount = 6) {
+    return function($url) use ($partsCount) {
+      if (null == $url) {
+        return $url;
+      }
+
+      if ($url[0] == '/') {
+        $url = $this->getSiteUrl().$url;
+      }
+
+      $parts = explode('/', $url);
+
+      if (!$parts || !is_countable($parts) || count($parts) < $partsCount) {
+        $url = null;
+      }
+
+      if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        $url = null;
+      }
+
+      return $url;
+    };
   }
 
 
