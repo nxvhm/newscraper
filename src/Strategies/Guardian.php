@@ -32,38 +32,33 @@ class Guardian extends Strategy implements NewsScraperInterface
    * @var Array
    */
   public $contentSelectors = [
-    'title'       => 'h1',
-    'description' => '.content__standfirst, .css-zjgnrw',
+    'title'       => 'title',
+    'description' => '.css-1rm7u2e p, .css-xmt4aq p, .content__main-column p',
     'date'        => 'time, .css-hn0k3p',
     'author'      => 'p.byline',
-    'text'        => '.content__article-body',
-  ];  
+    'text'        => '.article-body-viewer-selector',
+  ];
 
-  /**
-   * Filter all urls which are not pointing to an article
-   *
-   * @param   Array  $links Raw extracted hrefs
-   * @return  Array  $links Filtered links pointing to an article
-   */
-  public function stripInvalidLinks(array $links): array {
-    foreach ($links as $key => $link) {
-      $parts = explode('/', $link);
+  public $onlyFirstResult = [
+    'description'
+  ];
 
-      if (!$parts || !is_countable($parts) || count($parts) < 8) {
-        unset($links[$key]);
-      }
-
-      if (!filter_var($link, FILTER_VALIDATE_URL)) {
-        unset($links[$key]);
-      }
-
+  public function validateAndFormatUrl($url) {
+    if (null == $url) {
+      return $url;
     }
 
-    return array_unique($links);
-  }
+    $parts = explode('/', $url);
 
-  public function extractDataFromLink(string $link): array {
+    if (!$parts || !is_countable($parts) || count($parts) < 8) {
+      $url = null;
+    }
 
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+      $url = null;
+    }
+
+    return $url;
   }
 
 }

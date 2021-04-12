@@ -44,38 +44,32 @@ class NewYorkTimes extends Strategy implements NewsScraperInterface
   ];
 
   /**
-   * Filter all urls which are not pointing to an article
+   * Filter urls which are not pointing to an article.
    *
-   * @param   Array  $links Raw extracted hrefs
-   * @return  Array  $links Filtered links pointing to an article
+   * @param   String  $url Raw extracted url from href attr
+   * @return  Mixed  $url String containing formated and Validated link, or null otherwise
    */
-  public function stripInvalidLinks(array $urls): array {
-    foreach ($urls as $key => $url) {
+  public function validateAndFormatUrl($url) {
 
-      # This site works with relative links, so concat with host
-      if ($url[0] == '/') {
-        $url = $this->getSiteUrl().$url;
-        # Save concatenated url back in array
-        $urls[$key] = $url;
-      }
-
-      $parts = array_filter(explode('/', $url));
-
-      if (!$parts || !is_countable($parts) || count($parts) < 6) {
-        unset($urls[$key]);
-      }
-
-      if (!filter_var($url, FILTER_VALIDATE_URL)) {
-        unset($urls[$key]);
-      }
-
+    if (null == $url) {
+      return $url;
     }
 
-    return array_unique($urls);
-  }
+    # This site works with relative links, so concat with host
+    if ($url[0] == '/') {
+      $url = $this->getSiteUrl().$url;
+    }
 
-  public function getContentSelectors(): array {
-    return $this->contentSelectors;
+    $parts = array_filter(explode('/', $url));
+    if (!$parts || !is_countable($parts) || count($parts) < 6) {
+      $url = null;
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+     $url = null;
+    }
+
+    return $url;
   }
 
 
