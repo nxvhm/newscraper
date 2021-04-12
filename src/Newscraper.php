@@ -70,7 +70,10 @@ class Newscraper {
       $this->output("Response Status Code is not 200, continue..", 'error');
       return [];
     }
-    return  $this->strategy->getArticleData($crawler);
+    return  array_merge(
+      $this->strategy->getArticleData($crawler),
+      ['url' => $url]
+    );
 
   }
 
