@@ -4,6 +4,7 @@ namespace Nxvhm\Newscraper\Commands;
 use Illuminate\Console\Command;
 use Nxvhm\Newscraper\Newscraper;
 use Nxvhm\Newscraper\Factory;
+use Nxvhm\Newscraper\Exceptions\InvalidResponseException;
 use Log;
 
 class Scraper extends Command
@@ -39,15 +40,12 @@ class Scraper extends Command
         return $this->error("No site specified");
       }
 
-      # Get instance of scraping strategy
-      $strategy = Factory::getScrapingStrategy($site);
-
-      if (!$strategy) {
-        throw new \Exception("Strategy class not found for $site");
-      }
-
       # Create scraper with desired strategy
-      $scraper = new Newscraper($strategy, $this);
+      $scraper = Newscraper::init($site, $this);
+
+      foreach($scraper->strategy->getPagesToCrawl() as $pageUrl) {
+        $this->info('Fetching Links from '.$pageUrl.' ...');
+      }
 
       $links = $scraper->getListOfLinks();
 
@@ -58,7 +56,18 @@ class Scraper extends Command
       $this->info(count($links). ' links after filter');
       foreach($links as $url) {
         try {
-          $article = $scraper->articleFromLink($url);
+
+          $this->line("Processing $url");
+
+          try {
+
+            $article = $scraper->articleFromLink($url);
+
+          } catch(InvalidResponseException $e) {
+
+            $this->error($e->getMessage());
+            continue;
+          }
 
           if (empty($article)) {
             $this->info("No data scrapped for $url");

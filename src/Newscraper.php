@@ -4,8 +4,10 @@ namespace Nxvhm\Newscraper;
 use Goutte\Client;
 use Illuminate\Console\Command;
 use Nxvhm\Newscraper\Strategies\Strategy;
+use Nxvhm\Newscraper\Contracts\NewsScraperContract;
+use Nxvhm\Newscraper\Exceptions\InvalidResponseException;
 
-class Newscraper {
+class Newscraper implements NewsScraperContract {
   /**
    * Crawling strategy
    *
@@ -15,16 +17,23 @@ class Newscraper {
 
   public $command;
 
-  public function __construct(Strategy $strategy, Command $cmd = null) {
+  public function __construct(Strategy $strategy) {
 
     $this->strategy = $strategy;
 
     $this->httpClient = new Client();
 
-    if (!is_null($cmd) && $cmd instanceof Command) {
-      $this->command = $cmd;
+  }
+
+  public static function init($siteName) {
+    # Get instance of scraping strategy
+    $strategy = Factory::getScrapingStrategy($siteName);
+
+    if (!$strategy) {
+      throw new \Exception("Strategy class not found for $siteName");
     }
 
+    return new self($strategy);
   }
 
   /**
@@ -37,10 +46,6 @@ class Newscraper {
     # Iterate through the pages we want to crawl and scrape all hrefs
     foreach ($this->strategy->getPagesToCrawl() as $page) {
 
-      if ($this->command) {
-        $this->command->info('Fetch Links from '.$page);
-      }
-
       $crawler = $this->httpClient->request('GET', $page);
 
       $anchors = $crawler->filter('a');
@@ -52,7 +57,6 @@ class Newscraper {
       });
     }
 
-    // $this->output(count($links). ' raw links extracted from pages');
     return $links;
     // return $this->strategy->stripInvalidLinks($links);
   }
@@ -62,25 +66,17 @@ class Newscraper {
       return [];
     }
 
-    $this->output("Processing $url", 'line');
-
     $crawler = $this->httpClient->request('GET', $url);
 
     if ($this->httpClient->getResponse()->getStatusCode() !== 200) {
-      $this->output("Response Status Code is not 200, continue..", 'error');
-      return [];
+      throw new InvalidResponseException("Response Status Code is not 200, continue..");
     }
+
     return  array_merge(
       $this->strategy->getArticleData($crawler),
       ['url' => $url]
     );
 
-  }
-
-  public function output(string $msg, $type = 'info'): void {
-    $this->command && $this->command instanceof Command
-      ? call_user_func([$this->command, $type], $msg)
-      : print("\n $msg");
   }
 
   public static function getConfig($path = null):array {

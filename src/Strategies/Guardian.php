@@ -2,10 +2,10 @@
 
 namespace Nxvhm\Newscraper\Strategies;
 
-use Nxvhm\Newscraper\Contracts\NewsScraperInterface;
+use Nxvhm\Newscraper\Contracts\CrawlingStrategyContract;
 use Symfony\Component\DomCrawler\Crawler;
 
-class Guardian extends Strategy implements NewsScraperInterface
+class Guardian extends Strategy implements CrawlingStrategyContract
 {
   public $name = "The Guardian";
 	/**
@@ -44,8 +44,7 @@ class Guardian extends Strategy implements NewsScraperInterface
   ];
 
   public function validateAndFormatUrl($url) {
-    return $this->urlValidationClosure($urlParts = 8);
-
+    return $this->urlValidationClosure($urlParts = 8)($url);
   }
 
 }

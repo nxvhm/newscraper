@@ -3,7 +3,7 @@
 namespace Nxvhm\Newscraper\Contracts;
 use Symfony\Component\DomCrawler\Crawler;
 
-interface NewsScraperInterface
+interface CrawlingStrategyContract
 {
 
   /**

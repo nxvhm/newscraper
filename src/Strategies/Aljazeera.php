@@ -2,10 +2,10 @@
 
 namespace Nxvhm\Newscraper\Strategies;
 
-use Nxvhm\Newscraper\Contracts\NewsScraperInterface;
+use Nxvhm\Newscraper\Contracts\CrawlingStrategyContract;
 use Symfony\Component\DomCrawler\Crawler;
 
-class Aljazeera extends Strategy implements NewsScraperInterface
+class Aljazeera extends Strategy implements CrawlingStrategyContract
 {
 
   public $name = "Aljazeera News";
