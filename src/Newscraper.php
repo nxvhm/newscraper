@@ -61,6 +61,13 @@ class Newscraper implements NewsScraperContract {
     // return $this->strategy->stripInvalidLinks($links);
   }
 
+  /**
+   * Get article data from a given url
+   *
+   * @param string $url
+   * @throws InvalidResponseException
+   * @return array
+   */
   public function articleFromLink(string $url): array {
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
       return [];

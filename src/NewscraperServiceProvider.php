@@ -32,9 +32,15 @@ class NewscraperServiceProvider extends ServiceProvider
         $this->commands($this->packageCommands);
       }
 
-        # php artisan vendor:publish --tag=config
-        $this->publishes([
-            __DIR__ . '/config/scraper.php' => \config_path('newscraper.php')
-        ], 'config');
+      # php artisan vendor:publish --tag=config
+      $this->publishes([
+          __DIR__ . '/../config/newscraper.php' => \config_path('newscraper.php')
+      ], 'config');
+
+      # php artisan vendor:publish --provider="Nxvhm\Newscraper\NewscraperServiceProvider" --tag=migrations
+      $this->publishes([
+        __DIR__.'/../database/migrations/create_newscraper_tables.php.stub' =>
+          \database_path('migrations/'.date('Y_m_d_His').'_create_newscraper_tables.php')
+      ], 'migrations');
     }
 }
