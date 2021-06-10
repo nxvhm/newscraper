@@ -22,6 +22,8 @@ class CreateNewscraperTables extends Migration
       $table->integer('site_id');
       $table->text('text')->nullable();
       $table->string('author')->nullable();
+      $table->text('description')->nullable();
+      $table->text('category')->nullable();
       // $table->string('location')->nullable();
       // $table->string('geo')->nullable();
       // $table->text('data')->nullable();
