@@ -1,7 +1,11 @@
 <?php
 
 namespace Nxvhm\Newscraper\Strategies;
+
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\MessageBag;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 abstract class Strategy {
 
@@ -141,6 +145,55 @@ abstract class Strategy {
 
       return $url;
     };
+  }
+  /**
+   * Retrieve the db record corresponsing to the Strategy
+   * and return its model
+   *
+   * @return Illuminate\Database\Eloquent\Model
+   */
+  public function getSiteModel(): Model {
+
+  }
+
+  /**
+   * Save article data in db
+   *
+   * @param array $article
+   * @throws Exception
+   * @return Illuminate\Support\MessageBag
+   */
+  public function saveData(array $article): MessageBag {
+    $articleModel = config('newscraper.model', false);
+
+    if (!$articleModel || !\class_exists($articleModel)) {
+      throw new \Exception("$articleModel not found");
+    }
+
+    $msg = new MessageBag();
+
+    $record = $articleModel::where('url', $article['url'])->first();
+
+    if ($record) {
+      $msg->add('exists', true);
+      return $msg;
+    }
+
+    try {
+
+      $record = $articleModel::create($article);
+      $msg->add('success', true);
+
+    } catch(\Exception $e) {
+
+      Log::error($e);
+      $msg->add('error', $e->getMessage());
+
+    }
+
+
+    return $msg;
+
   }
 
 
