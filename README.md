@@ -10,13 +10,13 @@
     "psr-4": { "Nxvhm\\Newscraper" : "app/Library/Nxvhm/Newscraper" }
 }
 ```
-2.1 Run ``composer dump-autoload``
+3. Run ``composer dump-autoload``
 
-3. Publish config and migration:
+4. Publish config and migration:
 ```
 php artisan vendor:publish --provider="Nxvhm\Newscraper\NewscraperServiceProvider"
 ```
-4. Run the migration
+5. Run the migration
 ```
 php artisan migrate
 ```
