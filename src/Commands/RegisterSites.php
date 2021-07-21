@@ -46,7 +46,11 @@ class RegisterSites extends Command {
       $siteName = $props['name'];
 
       $record = Site::where('name', $props['name'])->first();
-      $record = $record ?? Site::create(['name' => $siteName, 'url' => $props['url']]);
+
+      $record = $record ?? Site::create([
+        'name' => $siteName,
+        'url' => $props['url']
+      ]);
 
       $this->info("$siteName is registered with id $record->id");
 

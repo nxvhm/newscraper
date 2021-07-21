@@ -23,6 +23,11 @@ php artisan migrate
 
 
 ## Usage
+Register strategies in database in order for them to have unique id
+```
+php artisan newscraper:register-sites
+```
+
 Start from artisan with the following cmd:               
 ```
   php artisan scrape:news {StrategyName}
