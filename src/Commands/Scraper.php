@@ -80,7 +80,24 @@ class Scraper extends Command
             );
           }
 
-          // $scraper->strategy->saveData($article);
+          if (!isset($article['date']) || empty($article['date'])) {
+            $this->error("No date scraped, cannot save without date");
+            continue;
+          }
+
+          $msg = $scraper->strategy->saveData($article);
+
+          if ($msg->has('error')) {
+            $this->error($msg->first('error'));
+          }
+
+          if ($msg->has('success') && $msg->has('id')) {
+            $this->info("Article saved with id ".$msg->first('id'));
+          }
+
+          if ($msg->has('exists')) {
+            $this->info("Article already exists in db");
+          }
 
           # Timeout between requests
           sleep($timeout);

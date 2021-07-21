@@ -6,6 +6,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Nxvhm\Newscraper\Models\Site;
 
 abstract class Strategy {
 
@@ -153,7 +154,7 @@ abstract class Strategy {
    * @return Illuminate\Database\Eloquent\Model
    */
   public function getSiteModel(): Model {
-
+    return Site::where('name', $this->name)->first();
   }
 
   /**
@@ -170,6 +171,12 @@ abstract class Strategy {
       throw new \Exception("$articleModel not found");
     }
 
+    $site = $this->getSiteModel();
+
+    if (!$site) {
+      throw new \Exception("Site model not found. Cant save article");
+    }
+
     $msg = new MessageBag();
 
     $record = $articleModel::where('url', $article['url'])->first();
@@ -180,9 +187,10 @@ abstract class Strategy {
     }
 
     try {
-
+      $article['site_id'] = $site->id;
       $record = $articleModel::create($article);
       $msg->add('success', true);
+      $msg->add('id', $record->id);
 
     } catch(\Exception $e) {
 
