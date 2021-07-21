@@ -11,6 +11,7 @@
 }
 ```
 2.1 Run ``composer dump-autoload``
+
 3. Publish config and migration:
 ```
 php artisan vendor:publish --provider="Nxvhm\Newscraper\NewscraperServiceProvider"
