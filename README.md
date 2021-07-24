@@ -32,7 +32,17 @@ Start from artisan with the following cmd:
 ```
   php artisan scrape:news {StrategyName}
 ```
-Where strategy name is an existing strategy class. 
+Where strategy name is an existing strategy class.                         
+
+To create scraping strategy class via CLI:
+```
+php artisan newscraper:create-strategy
+```
+After creating it, you should update the autoload maps and register it in db:
+```
+composer dump-autoload
+php artisan newscraper:register-sites
+```
 
 ## ToDO
 
