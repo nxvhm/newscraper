@@ -78,6 +78,8 @@ abstract class Strategy {
 
     foreach ($this->getContentSelectors() as $contentType => $selector) {
 
+      if (!$selector) continue;
+
       # If method is implemented for parsing the specific content type,
       # then execute that method and continue with next contentType
       $methodName = 'parse'.ucfirst($contentType);

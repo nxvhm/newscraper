@@ -9,7 +9,8 @@ class NewscraperServiceProvider extends ServiceProvider
 
     public $packageCommands = [
         \Nxvhm\Newscraper\Commands\Scraper::class,
-        \Nxvhm\Newscraper\Commands\RegisterSites::class
+        \Nxvhm\Newscraper\Commands\RegisterSites::class,
+        \Nxvhm\Newscraper\Commands\CreateStrategy::class
     ];
 
     /**
