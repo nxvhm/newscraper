@@ -47,6 +47,6 @@ php artisan newscraper:register-sites
 ## ToDO
 
 * Define site strategies from a config file
-* Allow strategy class lookup in a configurable namespaces not only in a single one 
+* --Allow strategy class lookup in a configurable namespaces not only in a single one-- 
 * Implement more strategies
 * Implement mechanism for Flexible Time/Date scraping 
