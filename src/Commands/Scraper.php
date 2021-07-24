@@ -12,7 +12,7 @@ class Scraper extends Command
     /**
      * @var string
      */
-    protected $signature = 'scrape:news {site : The site to be scraped} {--timeout=1}';
+    protected $signature = 'scrape:news {site : The site to be scraped} {--timeout=1} {--save=1}';
 
     protected $client;
 
@@ -31,6 +31,7 @@ class Scraper extends Command
     {
       $site    = $this->argument('site');
       $timeout = $this->option('timeout');
+      $save    = $this->option('save');
 
       if ($timeout < 1) {
         throw new \Exception("Timeouts less then 1 are not acceptable");
@@ -82,6 +83,11 @@ class Scraper extends Command
 
           if (!isset($article['date']) || empty($article['date'])) {
             $this->error("No date scraped, cannot save without date");
+            continue;
+          }
+
+          if (!$save) {
+            sleep($timeout);
             continue;
           }
 
