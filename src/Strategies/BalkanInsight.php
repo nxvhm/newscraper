@@ -23,9 +23,16 @@ class BalkanInsight extends Strategy implements CrawlingStrategyContract
    * @var array
    */
   public $pagesToCrawl = [
+    '/albania-home',
     '/bulgaria-home',
     '/romania-home',
     '/croatia-home',
+    '/greece-home',
+    '/kosovo-home',
+    '/macedonia-home',
+    '/turkey-home',
+
+
   ];
 
   /**
