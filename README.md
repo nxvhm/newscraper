@@ -4,13 +4,19 @@
 
 1. Download package and paste the package in your laravel app.
 
-2. Update composer to autoload it. For example:
+2. Add the package folder path  in composer's repositories section as local. For example:
 ```
-"autoload": {
-    "psr-4": { "Nxvhm\\Newscraper" : "app/Library/Nxvhm/Newscraper" }
-}
+
+    "repositories": {
+        "local": {
+            "type": "path",
+            "url": "app/Library/nxvhm/newscraper"
+        }
+    },
+
 ```
-3. Run ``composer dump-autoload``
+3. Run ``composer require "nxvhm\newscraper @dev"``. This will symlink the package to the vendor/ folder and install its dependencies and treat it as regular composer pkg.
+At this point the package should be auto-discoverable from laravel.
 
 4. Publish config and migration:
 ```
