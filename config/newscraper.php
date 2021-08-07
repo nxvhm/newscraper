@@ -11,6 +11,12 @@ return [
   'strategy_namespace' => [],
 
   /**
+   * Custom eloquent model for saving the strategy classes, if no class provided
+   * Nxvhm\Newscraper\Models\Site will be used
+   */
+  'site_model' => null,
+
+  /**
    * Pass class and method which will handle article save
    * If null, default save method from Newscraper\Strategies\Strategy
    * will be used

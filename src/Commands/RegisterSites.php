@@ -45,9 +45,13 @@ class RegisterSites extends Command {
 
       $siteName = $props['name'];
 
-      $record = Site::where('name', $props['name'])->first();
+      $siteModel = config('newscraper.site_model') && class_exists(config('newscraper.site_model'))
+        ? config('newscraper.site_model')
+        : Site::class;
 
-      $record = $record ?? Site::create([
+      $record = $siteModel::where('name', $props['name'])->first();
+
+      $record = $record ?? $siteModel::create([
         'name' => $siteName,
         'url' => $props['url']
       ]);
