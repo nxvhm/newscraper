@@ -1,6 +1,7 @@
 <?php
 
 namespace Nxvhm\Newscraper;
+use Nxvhm\Newscraper\Contracts\ArticleSaver;
 
 class Factory {
 
@@ -71,6 +72,23 @@ class Factory {
     return $res;
 
   }
+  /**
+   * Check if custom save class is implementing the ArticleSaver
+   * contract and if true return it
+   * @throws Exception
+   * @return String $saverClass Class
+   */
+  public static function getArticleSaverClass(): string
+  {
+    $saverClass = config('newscraper.custom_save');
 
+    $ref = new \ReflectionClass($saverClass);
+
+    if (!$ref->implementsInterface(ArticleSaver::class)) {
+      throw new \Exception("Custom class $saverClass is not implementing the article saver contract");
+    }
+
+    return $saverClass;
+  }
 
 }

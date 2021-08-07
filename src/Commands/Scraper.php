@@ -91,7 +91,18 @@ class Scraper extends Command
             continue;
           }
 
-          $msg = $scraper->strategy->saveData($article);
+          if (config('newscraper.custom_save')) {
+
+            $saveClass = Factory::getArticleSaverClass();
+
+            $msg = call_user_func_array(
+              [$saveClass, 'saveArticle'],
+              [$article, $scraper->strategy]
+            );
+
+          } else {
+            $msg = $scraper->strategy->saveData($article);
+          }
 
           if ($msg->has('error')) {
             $this->error($msg->first('error'));

@@ -50,6 +50,28 @@ composer dump-autoload
 php artisan newscraper:register-sites
 ```
 
+### Custom article db save logic
+
+For customized logic on saving article to db provide the responsible class in the config file in ``custom_save``. The class should implement the ``Nxvhm\Newscraper\Contracts\ArticleSaver`` contract. Example:
+
+```
+<?php
+
+namespace App;
+use Nxvhm\Newscraper\Strategies\Strategy;
+use Nxvhm\Newscraper\Contracts\ArticleSaver as ArticleSaverInterface;
+use Illuminate\Support\MessageBag;
+
+class ArticleSaver implements ArticleSaverInterface
+{
+  public static function saveArticle(array $article, Strategy $strategy): MessageBag
+  {
+    # Custom logic goes here
+    dd($article, $strategy->name);
+  }
+}
+```
+
 ## ToDO
 
 * Define site strategies from a config file
