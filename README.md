@@ -4,8 +4,11 @@
 
 1. Download package and paste the package in your laravel app.
 
-2. Add the package folder path  in composer's repositories section as local. For example:
+2. Add the package folder path  in composer's repositories section as local, and update your require section. For example:
 ```
+    "require" : {
+        "nxvhm/newscraper": "dev-master"
+    },
 
     "repositories": {
         "local": {
@@ -15,7 +18,7 @@
     },
 
 ```
-3. Run ``composer require "nxvhm\newscraper @dev"``. This will symlink the package to the vendor/ folder and install its dependencies and treat it as regular composer pkg.
+3. Run ``composer require "nxvhm/newscraper dev-master"``. This will symlink the package to the vendor/ folder and install its dependencies and treat it as regular composer pkg.
 At this point the package should be auto-discoverable from laravel.
 
 4. Publish config and migration:
