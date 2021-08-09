@@ -111,7 +111,11 @@ abstract class Strategy {
         } else {
           # Get only the first node from the query selector results
           $node = $crawler->filter($selector)->first();
-          $data[$contentType] = $node->text();
+          if ($contentType == 'date') {
+            $data[$contentType] = date('Y-m-d', strtotime($node->text()));
+          } else {
+            $data[$contentType] = $node->text();
+          }
         }
 
       }

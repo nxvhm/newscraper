@@ -48,6 +48,9 @@ class BalkanInsight extends Strategy implements CrawlingStrategyContract
     'text' => '.btArticleBody',
   ];
 
+  public $onlyFirstResult = [
+    'date'
+  ];
 
   /**
    * Filter  which are not pointing to an article.
