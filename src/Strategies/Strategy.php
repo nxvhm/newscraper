@@ -109,7 +109,6 @@ abstract class Strategy {
           });
 
         } else {
-
           # Get only the first node from the query selector results
           $node = $crawler->filter($selector)->first();
           $data[$contentType] = $node->text();
@@ -156,7 +155,12 @@ abstract class Strategy {
    * @return Illuminate\Database\Eloquent\Model
    */
   public function getSiteModel(): Model {
-    return Site::where('name', $this->name)->first();
+
+    $siteModel = config('newscraper.site_model') && class_exists(config('newscraper.site_model'))
+    ? config('newscraper.site_model')
+    : Site::class;
+
+    return $siteModel::where('name', $this->name)->first();
   }
 
   /**
