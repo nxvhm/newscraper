@@ -42,6 +42,9 @@ class Aljazeera extends Strategy implements CrawlingStrategyContract
     'text'        => '.wysiwyg--all-content',
   ];
 
+  public $onlyFirstResult = [
+    'date'
+  ];
 
   /**
    * Filter  which are not pointing to an article.
