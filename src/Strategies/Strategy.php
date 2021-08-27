@@ -60,7 +60,7 @@ abstract class Strategy {
    * @param   Array  $urls Raw extracted hrefs
    * @return  Array  Filtered links pointing to an article
    */
-  public function stripInvalidLinks($urls): array {
+  public function stripInvalidLinks(array $urls): array {
     return array_unique(array_filter(
       array_map([$this, 'validateAndFormatUrl'], $urls)
     ));
