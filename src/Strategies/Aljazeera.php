@@ -36,7 +36,7 @@ class Aljazeera extends Strategy implements CrawlingStrategyContract
   public $contentSelectors = [
     'title'       => 'h1',
     'description' => '.article__subhead',
-    'date'        => '.date-simple',
+    'date'        => '.date-simple > span:nth-child(2)',
     'author'      => '.article-heading-author-name',
     'category'    => '.topics',
     'text'        => '.wysiwyg--all-content',
