@@ -34,7 +34,7 @@ class Guardian extends Strategy implements CrawlingStrategyContract
   public $contentSelectors = [
     'title'       => 'title',
     'description' => '.css-1rm7u2e p, .css-xmt4aq p, .content__main-column p, .dcr-1pxemzg p, .dcr-u4zu7g p, .dcr-chmysj p',
-    'date'        => 'time, .css-hn0k3p, .dcr-hn0k3p',
+    'date'        => 'time, .css-hn0k3p, .dcr-12fpzem, .dcr-km9fgb > summary',
     'author'      => 'p.byline',
     'text'        => '.article-body-viewer-selector',
     'category'    => '.dcr-r260na'
