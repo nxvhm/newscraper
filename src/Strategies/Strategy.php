@@ -214,7 +214,24 @@ abstract class Strategy {
 
   }
 
+  /**
+   * Check if url is already scraped and exists in database
+   *
+   * @param   string  $url
+   * @return  bool  True if exists, false otherwise
+   */
+  public function hasArticle(string $url):bool {
+    $articleModel = config('newscraper.model', false);
 
+    if (!$articleModel || !\class_exists($articleModel)) {
+      throw new \Exception("$articleModel not found");
+    }
+
+    $record = $articleModel::where('url', $url)->first();
+
+    return $record ? true : false;
+
+  }
 
 
 }

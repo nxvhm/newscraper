@@ -12,7 +12,7 @@ class Scraper extends Command
     /**
      * @var string
      */
-    protected $signature = 'scrape:news {site : The site to be scraped} {--timeout=1} {--save=1}';
+    protected $signature = 'scrape:news {site : The site to be scraped} {--timeout=1} {--save=1} {--rescrape}';
 
     protected $client;
 
@@ -61,6 +61,11 @@ class Scraper extends Command
           $this->line("Processing $url");
 
           try {
+
+            if ($scraper->strategy->hasArticle($url) && !$this->option('rescrape')) {
+              $this->info("Already scraped:".$url);
+              continue;
+            }
 
             $article = $scraper->articleFromLink($url);
 
