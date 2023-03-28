@@ -40,11 +40,11 @@ class BBCNews extends Strategy implements CrawlingStrategyContract
    */
   public $contentSelectors = [
    'title' => 'h1#main-heading',
-   'description' => 'article > .ssrcss-uf6wea-RichTextComponentWrapper',
+   'description' => '.ssrcss-11r1m41-RichTextComponentWrapper.ep2nwvo0',
    'date' => 'time',
    'author' => '',
    'category' => '',
-   'text' => 'article > .ssrcss-uf6wea-RichTextComponentWrapper',
+   'text' => '.ssrcss-pv1rh6-ArticleWrapper.e1nh2i2l6',
 
   ];
 
