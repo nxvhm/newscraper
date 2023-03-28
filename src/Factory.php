@@ -91,4 +91,38 @@ class Factory {
     return $saverClass;
   }
 
+  /**
+   * Try to determine and instanciate a scraping strategy
+   * from a given url
+   * @param string $url
+   * @throws Exception
+   * @return Strategy
+   */
+  public static function getStrategyFromUrl(string $url): Strategy
+  {
+    $urlInfo    = parse_url($url);
+    $strategy   = false;
+    $host       = $urlInfo['scheme'].'://'.$urlInfo['host'];
+    $strategyClasses = self::getStrategiesClasses();
+
+    foreach ($strategyClasses as $strategyClass) {
+
+      $ref = new \ReflectionClass($strategyClass);
+      $props = $ref->getDefaultProperties();
+
+      if (isset($props['url']) && $props['url'] == $host) {
+        $strategy = new $strategyClass();
+      }
+    }
+    if (!$strategy) {
+      throw new \Exception(sprintf(
+        "Strategy does not exists or cannot be determined for url: %s",
+        $url
+      ));
+    }
+
+    return $strategy;
+
+  }
+
 }
