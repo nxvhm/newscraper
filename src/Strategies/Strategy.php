@@ -103,6 +103,8 @@ abstract class Strategy {
 
               $data[$contentType] = $dateStr ? date('Y-m-d', $dateStr) : $node->text();
 
+            } else if ($contentType == 'image' && $node->nodeName() == 'img') {
+              $data[$contentType] = $node->attr('src');
             } else {
               $data[$contentType] .= $node->text();
             }

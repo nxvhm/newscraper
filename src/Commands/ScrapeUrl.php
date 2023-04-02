@@ -35,7 +35,18 @@ class ScrapeUrl extends Command
 
         $scraper = new Newscraper($strategy);
         $data = $scraper->articleFromLink($url);
-        dd($data);
+        if (config('newscraper.custom_save')) {
+
+          $saveClass = Factory::getArticleSaverClass();
+
+          $msg = call_user_func_array(
+            [$saveClass, 'saveArticle'],
+            [$article, $scraper->strategy]
+          );
+
+        } else {
+          $msg = $scraper->strategy->saveData($article);
+        }
 
 
     }

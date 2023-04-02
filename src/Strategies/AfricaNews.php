@@ -45,7 +45,7 @@ class AfricaNews extends Strategy implements CrawlingStrategyContract
    'author' => '.article__author',
    'category' => '',
    'text' => '.article-content__text',
-
+   'image' => '.article-wrapper .article__image > img'
   ];
 
 
