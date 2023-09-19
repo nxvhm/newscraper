@@ -40,6 +40,7 @@ class Aljazeera extends Strategy implements CrawlingStrategyContract
     'author'      => '.article-heading-author-name',
     'category'    => '.topics',
     'text'        => '.wysiwyg--all-content',
+    'image'       => '.article-featured-image img, .wysiwyg figure img, .react_lightgallery_item .responsive-image img'
   ];
 
   public $onlyFirstResult = [

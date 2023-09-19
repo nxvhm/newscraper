@@ -39,15 +39,14 @@ class AfricaNews extends Strategy implements CrawlingStrategyContract
    * @var Array
    */
   public $contentSelectors = [
-   'title' => 'h1.article__title',
-   'description' => '.article-content__text p:nth-child(1)',
-   'date' => '.article__meta > time',
-   'author' => '.article__author',
-   'category' => '',
-   'text' => '.article-content__text',
-   'image' => '.article-wrapper .article__image > img'
-  ];
-
+    'title' => 'h1.article__title',
+    'description' => '.article-content__text p:nth-child(1)',
+    'date' => '.article__meta > time',
+    'author' => '.article__author',
+    'category' => '',
+    'text' => '.article-content__text',
+    'image' => '.article-wrapper .article__image > img'
+   ];
 
   /**
    * Filter  which are not pointing to an article.

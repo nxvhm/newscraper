@@ -39,14 +39,14 @@ class BBCNews extends Strategy implements CrawlingStrategyContract
    * @var Array
    */
   public $contentSelectors = [
-   'title' => 'h1#main-heading',
-   'description' => '.ssrcss-11r1m41-RichTextComponentWrapper.ep2nwvo0',
-   'date' => 'time',
-   'author' => '',
-   'category' => '',
-   'text' => '.ssrcss-pv1rh6-ArticleWrapper.e1nh2i2l6',
-
-  ];
+    'title' => 'h1#main-heading',
+    'description' => '.ssrcss-11r1m41-RichTextComponentWrapper.ep2nwvo0',
+    'date' => 'time, author-unit__container > span',
+    'author' => '',
+    'category' => '',
+    'text' => '.ssrcss-pv1rh6-ArticleWrapper.e1nh2i2l6',
+    'image' => 'article picture img'
+   ];
 
   public $onlyFirstResult = [
     'date',
